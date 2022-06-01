@@ -5,6 +5,8 @@ code\ examples/*.gif
 *.gif
 figures/*.png
 .idea
+*.xml
+*.iml
 **__pycache__
 **.ipynb_checkpoints
 

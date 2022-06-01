@@ -18,7 +18,6 @@
 # Finally, start jupyter:
 #     $ jupyter notebook
 #
-
 jupyter==1.0.0
 matplotlib==3.5.1
 numexpr==2.8.1
