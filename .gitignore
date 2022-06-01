@@ -1,2 +1,10 @@
-# created by virtualenv automatically
-*
+
+code\ examples/*.png
+code\ examples/*.gif
+*.png
+*.gif
+figures/*.png
+.idea
+**__pycache__
+**.ipynb_checkpoints
+
