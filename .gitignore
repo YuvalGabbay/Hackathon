@@ -9,4 +9,3 @@ figures/*.png
 *.iml
 **__pycache__
 **.ipynb_checkpoints
-
