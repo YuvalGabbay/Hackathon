@@ -65,6 +65,9 @@ def load_data(filename: str) -> pd.DataFrame:
 
     return df
 
+def preprocess1(df: pd.DataFrame):
+    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
+    print(df["Histological_diagnosis"].uniqe())
 
 def preprocess3(df: pd.DataFrame):
     #preprocess column "Surgery sum"
