@@ -10,7 +10,7 @@ class Estimator2:
     Polynomial Fitting using Least Squares estimation
     """
 
-    def __init__(self, weights):
+    def __init__(self):
         """
         Instantiate a polynomial fitting estimator
 
@@ -20,7 +20,6 @@ class Estimator2:
             Degree of polynomial to fit
         """
         super().__init__()
-        self.weights=weights
         self.model = DecisionTreeClassifier(random_state=0)
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
