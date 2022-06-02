@@ -11,6 +11,10 @@ import pandas as pd
 import random
 from sklearn.model_selection import train_test_split
 
+def load_labels(filename: str) -> pd.DataFrame:
+    df = pd.read_csv(filepath_or_buffer=filename, names=["labels"])
+    return df
+
 
 def load_data(filename: str) -> pd.DataFrame:
     """
@@ -24,7 +28,7 @@ def load_data(filename: str) -> pd.DataFrame:
     -------
     Design matrix and response vector (Temp)
     """
-    df = pd.read_csv(filepath_or_buffer=filename).drop_duplicates()
+    df = pd.read_csv(filepath_or_buffer=filename)
     df.columns = ['Form_Name',
                   'Hospital',
                   'User_Name',
@@ -58,48 +62,59 @@ def load_data(filename: str) -> pd.DataFrame:
                   'pr',
                   'surgery_before_or_after-Activity_date',
                   'surgery_before_or_after-Actual_activity',
-                  'id-hushed_internalpatientid']
+                  'id']
     # @TODO  - לשנות את התאריך לכמה זמן מאובחנת מהיום
-    fields_to_drop = ["Hospital", "Diagnosis_date"]
+    fields_to_drop = ["Hospital"]
     df = df.drop(columns=fields_to_drop)
+
 
     return df
 
+
 def preprocess1(df: pd.DataFrame):
-    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA",
-        "INFILTRATING DUCTULAR CARCINOMA WITH DCIS"]
-    data = pd.get_dummies(df, prefix="zipcode_", columns=["zipcode"])
+    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
+    print(df["Histological_diagnosis"].unique())
+    df.drop_duplicates()
 
 
 def preprocess2(df: pd.DataFrame):
-    df['test'] = df["KI67_protein"].str.rstrip('%')
-    df['tset'] = df['test']
+    # preprocess the KI67_protein field
+    field_name = 'KI67_protein'
+    unique = df[field_name].value_counts()
+    df[field_name] = df[field_name].str.rstrip('%')
+    df[field_name] = df[field_name].str.replace(pat='(/w+)', repl='-1', regex=True)
+    df[field_name] = df[field_name].fillna(value=-1)
+    df[field_name] = df[field_name].str.findall('(\d+)')
+    df[field_name] = df[field_name].apply(lambda x: np.float(np.array(x, dtype=float).mean()))
+    df[field_name] = df[field_name].astype(float)
+    mean_value = df[field_name].mean()
+    df[field_name].fillna(value=mean_value, inplace=True)
+
+    a = 1
     # from datetime import datetime
     # m = df['test'].apply(lambda v: isinstance(v, datetime))
 
 
 
 def preprocess3(df: pd.DataFrame):
-    #preprocess column "Surgery sum"
+    #drop nan from Surgery_sum,Tumor_depth,Tumor_width
     df["Surgery_sum"] = df["Surgery_sum"].fillna(0)
-    print(df["Surgery_sum"].unique())
-    #Drop duplicate columns in which the user name
-    #df = df.loc[(df['User Name'].duplicates | ~df['Diagnosis date'].duplicated())]#TODO
+    df["Tumor_depth"] = df["Tumor_depth"].fillna(0)
+    df["Tumor_width"] = df["Tumor_width"].fillna(0)
+
+    #change margin type to binary values
+    df['Margin_Type'] = df['Margin_Type'].replace(['נקיים'], 0)
+    df['Margin_Type'] = df['Margin_Type'].replace(['ללא'], 0)
+    df['Margin_Type'] = df['Margin_Type'].replace(['נגועים'], 1)
+    #print(df["Margin_Type"].unique())
+
+    #Drop duplicate columns in which the user name and the day are the same
+    datetimes = pd.to_datetime(df['Diagnosis_date'])
 
 
-    df[:, "Surgery_sum"]=df[:, "Surgery_sum"].astype(int)
-def preprocess_label(df:pd.DataFrame, df_label:pd.Series):
-    df_label.columns = ["labels"]
-    print(df_label["labels"].unique())
-    bon = pd.Series(df.shape[0])
-    hep = pd.Series(df.shape[0])
-    ski = pd.Series(df.shape[0])
-    oth = pd.Series(df.shape[0])
-    zero_data = np.zeros(shape=(len(df), 1))
-    d = pd.DataFrame(zero_data, columns=feature_list)
-
-
-
+    df['date'] = datetimes.dt.date
+    df = df.drop_duplicates(subset=['id', 'date'], keep='first')
+    print(df.shape)
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
