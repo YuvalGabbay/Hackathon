@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 import matplotlib.pyplot as plt
+from Model import Estimator
 from Model2 import Estimator2
 import utils
 
@@ -11,7 +12,7 @@ def bar_plot(y_true, y_pred):
     X = y_true.unique()
     plt.bar(X, y_true, 0.4, label='true labels')
     plt.bar(X, y_pred, 0.4, label='pred labels')
-    print(plt)
+    plt.show()
 
 
 if __name__ == '__main__':
@@ -34,14 +35,13 @@ if __name__ == '__main__':
     df_after = df_after[relevant_features]
     cols = new_labels.columns
     # weights = np.zeros(df_after.shape[0])
-    # weights = new_labels.loc[(new_labels >= 1)]
-    # a = 1
-
-    est=Estimator2()
-    est.fit(df_after, labels_1)
-    predicted_val = est.predict(df_after)
-    print("pred",predicted_val)
-    print('a')
-    print(predicted_val)
-    print("LOS",est.loss(df_after, labels_1))
-
+    weights = np.where((new_labels >= 1).any(axis=1), 0.9, 0.1)
+    model_1 = Estimator(weights=weights)
+    model_1.fit(df_after, new_labels)
+    y = model_1.predict(df_after)
+    loss = model_1.loss(df_after, new_labels)
+    num_of_lines = np.count_nonzero((y >= 1).any(axis=1))
+    num_overall = np.count_nonzero(y >= 1)
+    est = Estimator2
+    est.fit(df_after, data['labels1'])
+    print(est.loss(df_after, data['labels1']))
