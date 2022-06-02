@@ -58,9 +58,9 @@ def load_data(filename: str) -> pd.DataFrame:
                   'pr',
                   'surgery_before_or_after-Activity_date',
                   'surgery_before_or_after-Actual_activity',
-                  'id-hushed_internalpatientid']
+                  'id']
     # @TODO  - לשנות את התאריך לכמה זמן מאובחנת מהיום
-    fields_to_drop = ["Hospital", "Diagnosis_date"]
+    fields_to_drop = ["Hospital"]
     df = df.drop(columns=fields_to_drop)
 
     return df
@@ -68,6 +68,7 @@ def load_data(filename: str) -> pd.DataFrame:
 def preprocess1(df: pd.DataFrame):
     histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
     print(df["Histological_diagnosis"].uniqe())
+    
 
 def preprocess2(df: pd.DataFrame):
     df['test'] = df["KI67_protein"].str.rstrip('%')
@@ -78,14 +79,23 @@ def preprocess2(df: pd.DataFrame):
 
 
 def preprocess3(df: pd.DataFrame):
-    #preprocess column "Surgery sum"
+    #drop nan from Surgery_sum,Tumor_depth,Tumor_width
     df["Surgery_sum"] = df["Surgery_sum"].fillna(0)
-    print(df["Surgery_sum"].unique())
-    #Drop duplicate columns in which the user name
-    #df = df.loc[(df['User Name'].duplicates | ~df['Diagnosis date'].duplicated())]#TODO
+    df["Tumor_depth"] = df["Tumor_depth"].fillna(0)
+    df["Tumor_width"] = df["Tumor_width"].fillna(0)
 
+    #change margin type to binary values
+    df['Margin_Type'] = df['Margin_Type'].replace(['נקיים'], 0)
+    df['Margin_Type'] = df['Margin_Type'].replace(['ללא'], 0)
+    df['Margin_Type'] = df['Margin_Type'].replace(['נגועים'], 1)
+    #print(df["Margin_Type"].unique())
 
-    df[:, "Surgery_sum"]=df[:, "Surgery_sum"].astype(int)
+    #Drop duplicate columns in which the user name and the day are the same
+    datetimes = pd.to_datetime(df['Diagnosis_date'])
+
+    df['date'] = datetimes.dt.date
+    df = df.drop_duplicates(subset=['id', 'date'], keep='first')
+    print(df.shape)
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
