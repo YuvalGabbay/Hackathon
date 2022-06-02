@@ -5,13 +5,18 @@ import plotly.io as pio
 import matplotlib.pyplot as plt
 import utils
 
+def bar_plot(y_true, y_pred):
+    X=y_true.unique()
+    plt.bar(X, y_true, 0.4, label = 'true labels')
+    plt.bar(X, y_pred, 0.4, label = 'pred labels')
+    print(plt)
+
+
 if __name__ == '__main__':
     file_name0 = 'Mission 2 - Breast Cancer/train.labels.0.csv'
     labels0 = utils.load_labels(filename=file_name0)
-
     file_name1 = 'Mission 2 - Breast Cancer/train.labels.1.csv'
     labels1 = utils.load_labels(filename=file_name1)
-
     file_name = 'Mission 2 - Breast Cancer/train.feats.csv'
 
     data = utils.load_data(filename=file_name)
@@ -22,4 +27,3 @@ if __name__ == '__main__':
     df_after = utils.preprocess3(data)
     a = 1
     vals=df_after['labels0'].value_counts()
-    print(vals)
