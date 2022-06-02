@@ -1,13 +1,16 @@
 from sklearn.ensemble import AdaBoostClassifier
 import numpy as np
 from typing import NoReturn
+from sklearn.datasets import load_iris
+from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeClassifier
 
 class Estimator:
     """
     Polynomial Fitting using Least Squares estimation
     """
 
-    def __init__(self):
+    def __init__(self, weights):
         """
         Instantiate a polynomial fitting estimator
 
@@ -17,7 +20,8 @@ class Estimator:
             Degree of polynomial to fit
         """
         super().__init__()
-        self.model = AdaBoostClassifier(n_estimators=100, random_state=0)
+        self.weights=weights
+        self.model = DecisionTreeClassifier(random_state=0)
 
     def _fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
         """
@@ -31,7 +35,7 @@ class Estimator:
         y : ndarray of shape (n_samples, )
             Responses of input data to fit to
         """
-        self.model.fit(X, y)
+        self.model.fit(X, y, sample_weight=self.weights, check_input=True)
 
 
     def _predict(self, X: np.ndarray) -> np.ndarray:
@@ -48,7 +52,7 @@ class Estimator:
         responses : ndarray of shape (n_samples, )
             Predicted responses of given samples
         """
-        self.model.predict(X)
+        self.model.predict(X, check_input=True)
 
     def _loss(self, X: np.ndarray, y: np.ndarray) -> float:
         """
@@ -67,4 +71,4 @@ class Estimator:
         loss : float
             Performance under MSE loss function
         """
-        return self.model.score(X, y)
+        return 1-self.model.score(X, y, sample_weight=None)
