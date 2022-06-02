@@ -5,7 +5,7 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
-class Estimator:
+class Estimator2:
     """
     Polynomial Fitting using Least Squares estimation
     """
