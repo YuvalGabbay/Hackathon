@@ -125,7 +125,7 @@ def preprocess4(df: pd.DataFrame):
         devided_labels.append(a)
     print("Divide", devided_labels)
     print("SUM", np.sum(devided_labels[0]))
-    y_df = pd.DataFrame(devided_labels, columns=loc)
+    y_df = pd.DataFrame(np.swapaxes(np.array(devided_labels), 0, 1), columns=loc)
     return y_df
 
 
