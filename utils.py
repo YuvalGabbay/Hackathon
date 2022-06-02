@@ -104,9 +104,7 @@ def preprocess3(df: pd.DataFrame):
     df['Margin_Type'] = df['Margin_Type'].replace(['נגועים'], 1)
     #print(df["Margin_Type"].unique())
 
-    #Drop duplicate columns in which the user name and the day are the same
-    datetimes = pd.to_datetime(df['Diagnosis_date'])
-    df['years_until_today'] = datetimes.dt.today.year-datetimes.at.year
+    #Drop duplicate columns in which the user name
     df = df.drop_duplicates(subset=['id'], keep='first')
     print(df[''])
     print(df.shape)
