@@ -66,7 +66,7 @@ def load_data(filename: str) -> pd.DataFrame:
     return df
 
 
-def preprocess(df: pd.DataFrame):
+def preprocess3(df: pd.DataFrame):
     #preprocess column "Surgery sum"
     df["Surgery_sum"] = df["Surgery_sum"].fillna(0)
     print(df["Surgery_sum"].unique())
