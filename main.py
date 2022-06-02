@@ -34,8 +34,8 @@ if __name__ == '__main__':
     df_after = df_after[relevant_features]
     cols = new_labels.columns
     # weights = np.zeros(df_after.shape[0])
-    # weights = new_labels[(new_labels[cols].sum() > 1)]
-    a = 1
+    # weights = new_labels.loc[(new_labels >= 1)]
+    # a = 1
 
     est=Estimator2()
     est.fit(df_after, labels_2)
