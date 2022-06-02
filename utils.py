@@ -70,15 +70,27 @@ def load_data(filename: str) -> pd.DataFrame:
 
     return df
 
+
 def preprocess1(df: pd.DataFrame):
     histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
     print(df["Histological_diagnosis"].unique())
     df.drop_duplicates()
-    
+
 
 def preprocess2(df: pd.DataFrame):
-    df['test'] = df["KI67_protein"].str.rstrip('%')
-    df['tset'] = df['test'].replace(regex='(/w+)', value='-1')
+    # preprocess the KI67_protein field
+    field_name = 'KI67_protein'
+    unique = df[field_name].value_counts()
+    df[field_name] = df[field_name].str.rstrip('%')
+    df[field_name] = df[field_name].str.replace(pat='(/w+)', repl='-1', regex=True)
+    df[field_name] = df[field_name].fillna(value=-1)
+    df[field_name] = df[field_name].str.findall('(\d+)')
+    df[field_name] = df[field_name].apply(lambda x: np.float(np.array(x, dtype=float).mean()))
+    df[field_name] = df[field_name].astype(float)
+    mean_value = df[field_name].mean()
+    df[field_name].fillna(value=mean_value, inplace=True)
+
+    a = 1
     # from datetime import datetime
     # m = df['test'].apply(lambda v: isinstance(v, datetime))
 
