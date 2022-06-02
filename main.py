@@ -8,5 +8,7 @@ import utils
 if __name__ == '__main__':
     file_name = 'Mission 2 - Breast Cancer/train.feats.csv'
     df = utils.load_data(filename=file_name)
-    df_after = utils.preprocess(df)
+    df_after = utils.preprocess1(df)
+    df_after = utils.preprocess2(df)
+    df_after = utils.preprocess3(df)
     a = 1

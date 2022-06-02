@@ -68,7 +68,7 @@ def load_data(filename: str) -> pd.DataFrame:
 
 def preprocess2(df: pd.DataFrame):
     df['test'] = df["KI67_protein"].str.rstrip('%')
-    df['tset'] = df['test']
+    df['tset'] = df['test'].replace(regex='(/w+)', value='-1')
     # from datetime import datetime
     # m = df['test'].apply(lambda v: isinstance(v, datetime))
 
