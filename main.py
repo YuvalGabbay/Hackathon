@@ -20,6 +20,7 @@ if __name__ == '__main__':
     df_after = utils.preprocess1(data)
     df_after = utils.preprocess2(data)
     df_after = utils.preprocess3(data)
+    utils.preprocess4(data)
     a = 1
     vals=df_after['labels0'].value_counts()
     print(vals)
