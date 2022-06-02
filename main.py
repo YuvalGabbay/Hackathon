@@ -25,6 +25,9 @@ if __name__ == '__main__':
     df_after = utils.preprocess1(data)
     df_after = utils.preprocess2(data)
     df_after = utils.preprocess3(data)
-    utils.preprocess4(data)
-    a = 1
+    new_labels = utils.preprocess4(df_after)
     vals=df_after['labels0'].value_counts()
+    relavent_features = ["Age", "KI67_protein", "Surgery_sum", "Tumor_depth", "Tumor_width", "Margin_Type"]
+    df_after=df_after[relavent_features]
+    print("SHAPE",df_after.shape, new_labels.shape)
+    print(vals)
