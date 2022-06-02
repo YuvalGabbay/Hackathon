@@ -11,6 +11,7 @@ import pandas as pd
 import random
 from sklearn.model_selection import train_test_split
 
+
 def load_labels(filename: str) -> pd.DataFrame:
     df = pd.read_csv(filepath_or_buffer=filename, names=["labels"])
     return df
@@ -67,15 +68,16 @@ def load_data(filename: str) -> pd.DataFrame:
     fields_to_drop = ["Hospital"]
     df = df.drop(columns=fields_to_drop)
 
-
     return df
 
 
 def preprocess1(df: pd.DataFrame):
-    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
-    #print(df["Histological_diagnosis"].unique())
+    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA",
+                              "INTRADUCTAL CARCINOMA", ]
+    # print(df["Histological_diagnosis"].unique())
     df.drop_duplicates()
     return df
+
 
 def preprocess2(df: pd.DataFrame):
     # preprocess the KI67_protein field
@@ -93,27 +95,27 @@ def preprocess2(df: pd.DataFrame):
 
 
 def preprocess3(df: pd.DataFrame):
-    #drop nan from Surgery_sum,Tumor_depth,Tumor_width
+    # drop nan from Surgery_sum,Tumor_depth,Tumor_width
     df["Surgery_sum"] = df["Surgery_sum"].fillna(0)
     df["Tumor_depth"] = df["Tumor_depth"].fillna(0)
     df["Tumor_width"] = df["Tumor_width"].fillna(0)
 
-    #change margin type to binary values
+    # change margin type to binary values
     df['Margin_Type'] = df['Margin_Type'].replace(['נקיים'], 0)
     df['Margin_Type'] = df['Margin_Type'].replace(['ללא'], 0)
     df['Margin_Type'] = df['Margin_Type'].replace(['נגועים'], 1)
-    #print(df["Margin_Type"].unique())
+    # print(df["Margin_Type"].unique())
 
-    #Drop duplicate columns in which the user name
+    # Drop duplicate columns in which the user name
     df = df.drop_duplicates(subset=['id'], keep='first')
-    print(df[''])
-    print(df.shape)
     return df
+
 
 def devide_label(df: pd.DataFrame, location):
     a = df['labels0'].str.contains(location, regex=False)
     a = a.astype(int)
     return a
+
 
 def preprocess4(df: pd.DataFrame):
     devided_labels = []
@@ -121,9 +123,11 @@ def preprocess4(df: pd.DataFrame):
     for i in loc:
         a = devide_label(df, i)
         devided_labels.append(a)
-    print("Divide",devided_labels)
-    print("SUM",np.sum(devided_labels[0]))
-    return devided_labels
+    print("Divide", devided_labels)
+    print("SUM", np.sum(devided_labels[0]))
+    y_df = pd.DataFrame(devided_labels, columns=loc)
+    return y_df
+
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
