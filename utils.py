@@ -66,8 +66,10 @@ def load_data(filename: str) -> pd.DataFrame:
     return df
 
 def preprocess1(df: pd.DataFrame):
-    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
-    print(df["Histological_diagnosis"].uniqe())
+    histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA",
+        "INFILTRATING DUCTULAR CARCINOMA WITH DCIS"]
+    data = pd.get_dummies(df, prefix="zipcode_", columns=["zipcode"])
+
 
 def preprocess2(df: pd.DataFrame):
     df['test'] = df["KI67_protein"].str.rstrip('%')
@@ -86,6 +88,18 @@ def preprocess3(df: pd.DataFrame):
 
 
     df[:, "Surgery_sum"]=df[:, "Surgery_sum"].astype(int)
+def preprocess_label(df:pd.DataFrame, df_label:pd.Series):
+    df_label.columns = ["labels"]
+    print(df_label["labels"].unique())
+    bon = pd.Series(df.shape[0])
+    hep = pd.Series(df.shape[0])
+    ski = pd.Series(df.shape[0])
+    oth = pd.Series(df.shape[0])
+    zero_data = np.zeros(shape=(len(df), 1))
+    d = pd.DataFrame(zero_data, columns=feature_list)
+
+
+
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
