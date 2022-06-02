@@ -61,10 +61,14 @@ def load_data(filename: str) -> pd.DataFrame:
                   'id-hushed_internalpatientid']
     # @TODO  - לשנות את התאריך לכמה זמן מאובחנת מהיום
 
-    fields_to_drop = ["User Name", "Diagnosis date"]
+    fields_to_drop = ["User Name", "Hospital", "Diagnosis date"]
     data = data.drop(columns=fields_to_drop)
     return df
 
+
+def preprocess(df: pd.DataFrame):
+
+    return df
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
