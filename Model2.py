@@ -51,7 +51,7 @@ class Estimator2:
         responses : ndarray of shape (n_samples, )
             Predicted responses of given samples
         """
-        self.model.predict(X)
+        return self.model.predict(X)
 
     def loss(self, X: np.ndarray, y: np.ndarray) -> float:
         """

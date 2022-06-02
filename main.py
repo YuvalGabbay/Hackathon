@@ -29,6 +29,7 @@ if __name__ == '__main__':
     df_after = utils.preprocess3(df_after)
     new_labels = utils.preprocess4(df_after)
     vals = df_after['labels0'].value_counts()
+    labels_1 = df_after['labels1']
     relevant_features = ["Age", "KI67_protein", "Surgery_sum", "Tumor_depth", "Tumor_width", "Margin_Type"]
     df_after = df_after[relevant_features]
     cols = new_labels.columns
@@ -36,6 +37,11 @@ if __name__ == '__main__':
     # weights = new_labels.loc[(new_labels >= 1)]
     # a = 1
 
-    est = Estimator2
-    est.fit(df_after, data['labels1'])
-    print(est.loss(df_after, data['labels1']))
+    est=Estimator2()
+    est.fit(df_after, labels_1)
+    predicted_val = est.predict(df_after)
+    print("pred",predicted_val)
+    print('a')
+    print(predicted_val)
+    print("LOS",est.loss(df_after, labels_1))
+
