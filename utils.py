@@ -25,50 +25,51 @@ def load_data(filename: str) -> pd.DataFrame:
     Design matrix and response vector (Temp)
     """
     df = pd.read_csv(filepath_or_buffer=filename).drop_duplicates()
-    df.columns = ['Form Name',
+    df.columns = ['Form_Name',
                   'Hospital',
-                  'User Name',
+                  'User_Name',
                   'Age',
-                  'Basic stage',
-                  'Diagnosis date',
+                  'Basic_stage',
+                  'Diagnosis_date',
                   'Her2',
-                  'Histological diagnosis',
-                  'Histopatological degree',
-                  'Ivi -Lymphovascular invasion',
-                  'KI67 protein',
-                  'Lymphatic penetration',
-                  'M -metastases mark (TNM)',
-                  'Margin Type',
-                  'N -lymph nodes mark (TNM)',
-                  'Nodes exam',
-                  'Positive nodes',
+                  'Histological_diagnosis',
+                  'Histopatological_degree',
+                  'Ivi -Lymphovascular_invasion',
+                  'KI67_protein',
+                  'Lymphatic_penetration',
+                  'M-metastases_mark_(TNM)',
+                  'Margin_Type',
+                  'N-lymph_nodes_mark_(TNM)',
+                  'Nodes_exam',
+                  'Positive_nodes',
                   'Side',
                   'Stage',
-                  'Surgery date1',
-                  'Surgery date2',
-                  'Surgery date3',
-                  'Surgery name1',
-                  'Surgery name2',
-                  'Surgery name3',
-                  'Surgery sum',
-                  'T -Tumor mark (TNM)',
-                  'Tumor depth',
-                  'Tumor width',
+                  'Surgery_date1',
+                  'Surgery_date2',
+                  'Surgery_date3',
+                  'Surgery_name1',
+                  'Surgery_name2',
+                  'Surgery_name3',
+                  'Surgery_sum',
+                  'T-Tumor_mark_(TNM)',
+                  'Tumor_depth',
+                  'Tumor_width',
                   'er',
                   'pr',
-                  'surgery before or after-Activity date',
-                  'surgery before or after-Actual activity',
+                  'surgery_before_or_after-Activity_date',
+                  'surgery_before_or_after-Actual_activity',
                   'id-hushed_internalpatientid']
     # @TODO  - לשנות את התאריך לכמה זמן מאובחנת מהיום
 
     fields_to_drop = ["User Name", "Hospital", "Diagnosis date"]
     data = df.drop(columns=fields_to_drop)
+
     return df
 
 
 def preprocess(df: pd.DataFrame):
 
-    return df
+    df[:, "Surgery sum"]=df[:, "Surgery sum"].astype(int)
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
