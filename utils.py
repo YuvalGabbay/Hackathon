@@ -11,6 +11,10 @@ import pandas as pd
 import random
 from sklearn.model_selection import train_test_split
 
+def load_labels(filename: str) -> pd.DataFrame:
+    df = pd.read_csv(filepath_or_buffer=filename, names=["labels"])
+    return df
+
 
 def load_data(filename: str) -> pd.DataFrame:
     """
@@ -24,7 +28,7 @@ def load_data(filename: str) -> pd.DataFrame:
     -------
     Design matrix and response vector (Temp)
     """
-    df = pd.read_csv(filepath_or_buffer=filename).drop_duplicates()
+    df = pd.read_csv(filepath_or_buffer=filename)
     df.columns = ['Form_Name',
                   'Hospital',
                   'User_Name',
@@ -63,11 +67,13 @@ def load_data(filename: str) -> pd.DataFrame:
     fields_to_drop = ["Hospital"]
     df = df.drop(columns=fields_to_drop)
 
+
     return df
 
 def preprocess1(df: pd.DataFrame):
     histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
-    print(df["Histological_diagnosis"].uniqe())
+    print(df["Histological_diagnosis"].unique())
+    df.drop_duplicates()
     
 
 def preprocess2(df: pd.DataFrame):
@@ -92,6 +98,7 @@ def preprocess3(df: pd.DataFrame):
 
     #Drop duplicate columns in which the user name and the day are the same
     datetimes = pd.to_datetime(df['Diagnosis_date'])
+
 
     df['date'] = datetimes.dt.date
     df = df.drop_duplicates(subset=['id', 'date'], keep='first')
