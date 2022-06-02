@@ -89,10 +89,6 @@ def preprocess2(df: pd.DataFrame):
     df[field_name] = df[field_name].astype(float)
     mean_value = df[field_name].mean()
     df[field_name].fillna(value=mean_value, inplace=True)
-
-    a = 1
-    # from datetime import datetime
-    # m = df['test'].apply(lambda v: isinstance(v, datetime))
     return df
 
 
@@ -110,8 +106,9 @@ def preprocess3(df: pd.DataFrame):
 
     #Drop duplicate columns in which the user name and the day are the same
     datetimes = pd.to_datetime(df['Diagnosis_date'])
-    df['date'] = datetimes.dt.date
-    df = df.drop_duplicates(subset=['id', 'date'], keep='first')
+    df['years_until_today'] = datetimes.dt.today.year-datetimes.at.year
+    df = df.drop_duplicates(subset=['id'], keep='first')
+    print(df[''])
     print(df.shape)
     return df
 
