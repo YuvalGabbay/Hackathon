@@ -61,7 +61,7 @@ def load_data(filename: str) -> pd.DataFrame:
                   'id-hushed_internalpatientid']
     # @TODO  - לשנות את התאריך לכמה זמן מאובחנת מהיום
     fields_to_drop = ["Hospital", "Diagnosis date"]
-    data = df.drop(columns=fields_to_drop)
+    df = df.drop(columns=fields_to_drop)
 
     return df
 
