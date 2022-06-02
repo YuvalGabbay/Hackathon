@@ -73,7 +73,7 @@ def load_data(filename: str) -> pd.DataFrame:
 
 def preprocess1(df: pd.DataFrame):
     histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA", "INTRADUCTAL CARCINOMA", ]
-    print(df["Histological_diagnosis"].unique())
+    #print(df["Histological_diagnosis"].unique())
     df.drop_duplicates()
     return df
 
@@ -110,12 +110,25 @@ def preprocess3(df: pd.DataFrame):
 
     #Drop duplicate columns in which the user name and the day are the same
     datetimes = pd.to_datetime(df['Diagnosis_date'])
-
-
     df['date'] = datetimes.dt.date
     df = df.drop_duplicates(subset=['id', 'date'], keep='first')
     print(df.shape)
     return df
+
+def devide_label(df: pd.DataFrame, location):
+    a = df['labels0'].str.contains(location, regex=False)
+    a = a.astype(int)
+    return a
+
+def preprocess4(df: pd.DataFrame):
+    devided_labels = []
+    loc = ["HEP", "LYM", "BON", "PUL"]
+    for i in loc:
+        a = devide_label(df, i)
+        devided_labels.append(a)
+    print("Divide",devided_labels)
+    print("SUM",np.sum(devided_labels[0]))
+    return devided_labels
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
