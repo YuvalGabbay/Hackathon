@@ -41,5 +41,5 @@ if __name__ == '__main__':
     est.fit(df_after, labels_1)
     predicted_val = est.predict(df_after)
     print(predicted_val)
-    print("LOSS",est.loss(df_after, labels_1))
+    print("LOS",est.loss(df_after, labels_1))
 
