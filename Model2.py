@@ -23,7 +23,7 @@ class Estimator2:
         self.weights=weights
         self.model = DecisionTreeClassifier(random_state=0)
 
-    def _fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
+    def fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
         """
         Fit Least Squares model to polynomial transformed samples
 
@@ -38,7 +38,7 @@ class Estimator2:
         self.model.fit(X, y, sample_weight=None)
 
 
-    def _predict(self, X: np.ndarray) -> np.ndarray:
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Predict responses for given samples using fitted estimator
 
@@ -54,7 +54,7 @@ class Estimator2:
         """
         self.model.predict(X)
 
-    def _loss(self, X: np.ndarray, y: np.ndarray) -> float:
+    def loss(self, X: np.ndarray, y: np.ndarray) -> float:
         """
         Evaluate performance under MSE loss function
 

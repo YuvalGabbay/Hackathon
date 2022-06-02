@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 import matplotlib.pyplot as plt
+from Model2 import Estimator2
 import utils
 
 
@@ -16,10 +17,8 @@ def bar_plot(y_true, y_pred):
 if __name__ == '__main__':
     file_name0 = 'Mission 2 - Breast Cancer/train.labels.0.csv'
     labels0 = utils.load_labels(filename=file_name0)
-
     file_name1 = 'Mission 2 - Breast Cancer/train.labels.1.csv'
     labels1 = utils.load_labels(filename=file_name1)
-
     file_name = 'Mission 2 - Breast Cancer/train.feats.csv'
 
     data = utils.load_data(filename=file_name)
@@ -36,3 +35,8 @@ if __name__ == '__main__':
     # weights = np.zeros(df_after.shape[0])
     # weights = new_labels[(new_labels[cols].sum() > 1)]
     a = 1
+
+    est=Estimator2
+    est.fit(df_after, data['labels1'])
+    print(est.loss(df_after, data['labels1']))
+
