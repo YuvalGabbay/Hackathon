@@ -40,5 +40,4 @@ if __name__ == '__main__':
     est=Estimator2()
     est.fit(df_after, labels_2)
     predicted_val = est.predict(df_after)
-    print("LOSS",est.loss(df_after, labels_2))
-
+    print("pred",predicted_val)
