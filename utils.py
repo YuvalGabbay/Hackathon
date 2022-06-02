@@ -66,12 +66,23 @@ def load_data(filename: str) -> pd.DataFrame:
     return df
 
 
+def preprocess2(df: pd.DataFrame):
+    df['test'] = df["KI67_protein"].str.rstrip('%')
+    df['tset'] = df['test']
+    # from datetime import datetime
+    # m = df['test'].apply(lambda v: isinstance(v, datetime))
+
+
+
 def preprocess3(df: pd.DataFrame):
     #preprocess column "Surgery sum"
     df["Surgery_sum"] = df["Surgery_sum"].fillna(0)
     print(df["Surgery_sum"].unique())
     #Drop duplicate columns in which the user name
     #df = df.loc[(df['User Name'].duplicates | ~df['Diagnosis date'].duplicated())]#TODO
+
+
+    df[:, "Surgery_sum"]=df[:, "Surgery_sum"].astype(int)
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
