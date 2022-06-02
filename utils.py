@@ -60,23 +60,21 @@ def load_data(filename: str) -> pd.DataFrame:
                   'surgery_before_or_after-Actual_activity',
                   'id-hushed_internalpatientid']
     # @TODO  - לשנות את התאריך לכמה זמן מאובחנת מהיום
-    fields_to_drop = ["Hospital", "Diagnosis date"]
+    fields_to_drop = ["Hospital", "Diagnosis_date"]
     df = df.drop(columns=fields_to_drop)
 
     return df
 
 
 def preprocess(df: pd.DataFrame):
-    #Drop column "Hospital"
-    df = df.drop('Hospital', 1)
     #preprocess column "Surgery sum"
-    df['Surgery sum'] = df['Surgery sum'].replace([None],0)
-    print(df['Surgery sum'].unique())
+    df['Surgery_sum'] = df['Surgery_sum'].replace([None],0)
+    print(df['Surgery_sum'].unique())
     #Drop duplicate columns in which the user name
     #df = df.loc[(df['User Name'].duplicates | ~df['Diagnosis date'].duplicated())]#TODO
 
 
-    df[:, "Surgery sum"]=df[:, "Surgery sum"].astype(int)
+    df[:, "Surgery_sum"]=df[:, "Surgery_sum"].astype(int)
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
