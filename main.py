@@ -21,3 +21,5 @@ if __name__ == '__main__':
     df_after = utils.preprocess2(data)
     df_after = utils.preprocess3(data)
     a = 1
+    vals=df_after['labels0'].value_counts()
+    print(vals)
