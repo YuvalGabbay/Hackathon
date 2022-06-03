@@ -5,7 +5,8 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
-class Estimator:
+
+class Estimator():
     """
     Polynomial Fitting using Least Squares estimation
     """
@@ -20,10 +21,10 @@ class Estimator:
             Degree of polynomial to fit
         """
         super().__init__()
-        self.weights=weights
-        self.model = DecisionTreeClassifier(random_state=0)
+        self.weights = weights
+        self.model = DecisionTreeClassifier(random_state=0, max_depth=5)
 
-    def _fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
+    def fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
         """
         Fit Least Squares model to polynomial transformed samples
 
@@ -37,8 +38,7 @@ class Estimator:
         """
         self.model.fit(X, y, sample_weight=self.weights, check_input=True)
 
-
-    def _predict(self, X: np.ndarray) -> np.ndarray:
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Predict responses for given samples using fitted estimator
 
@@ -52,9 +52,9 @@ class Estimator:
         responses : ndarray of shape (n_samples, )
             Predicted responses of given samples
         """
-        self.model.predict(X, check_input=True)
+        return self.model.predict(X, check_input=True)
 
-    def _loss(self, X: np.ndarray, y: np.ndarray) -> float:
+    def loss(self, X: np.ndarray, y: np.ndarray) -> float:
         """
         Evaluate performance under MSE loss function
 
@@ -71,4 +71,9 @@ class Estimator:
         loss : float
             Performance under MSE loss function
         """
-        return 1-self.model.score(X, y, sample_weight=None)
+        from sklearn.model_selection import cross_val_score
+        from sklearn.model_selection import KFold
+        kf = KFold(n_splits=5)
+        scores = cross_val_score(self.model, X, y, cv=kf, scoring='accuracy')
+        return scores
+        # return 1 - self.model.score(X, y, sample_weight=self.weights)
