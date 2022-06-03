@@ -48,7 +48,7 @@ if __name__ == '__main__':
         model_1 = Estimator(weights=weights)
         model_1.fit(df_after, new_labels)
         y_pred = model_1.predict(df_after)
-        bar_plot(new_labels, y_pred)
+        # bar_plot(new_labels, y_pred)
 
         # Get labels for test
         file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
@@ -68,7 +68,14 @@ if __name__ == '__main__':
     try:
         est = Estimator2()
         est.fit(X=df_after, y=data['labels1'])
-        loss = est.loss(df_after, data['labels1'])
+        loss = est.loss(df_after, df_after['labels1'])
         print("loss part 2:" + str(loss))
+
+        part_1_path = 'part2/predictions.csv'
+        filepath = Path(part_1_path)
+        filepath.parent.mkdir(parents=True, exist_ok=True)
+        col_name = 'אבחנה-Tumor size'
+        df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
+        df_to_save_part_2.to_csv(filepath)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 2")
