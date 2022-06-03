@@ -10,6 +10,21 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 
+def formal_format(df: pd.DataFrame):
+    loc = ["'HEP - Hepatic'", "'LYM - Lymph nodes'", "'BON - Bones'", ", 'PLE - Pleura'"]
+
+    def label_race(row, arr):
+        val = []
+        for i in range(4):
+            if row[i] == 1:
+                val.append(loc[i])
+        arr.append(val)
+
+    labels = []
+    df.apply(lambda row: label_race(row, labels), axis=1)
+    col_name = 'אבחנה-Location of distal metastases'
+    return pd.DataFrame(labels, columns=[col_name])
+
 
 def bar_plot(y_true, y_pred):
     X = y_true.columns.values
@@ -42,7 +57,7 @@ if __name__ == '__main__':
         data['labels0'] = labels0['labels']
         data['labels1'] = labels1['labels']
         df_after = utils.preprocess(data)
-        new_labels = utils.preprocess_labels_part_1(df_after)
+        new_labels, original_labels = utils.preprocess_labels_part_1(df_after)
         labels_1 = df_after['labels1']
         relevant_features = ["Age", "KI67_protein", "Surgery_sum", "Tumor_depth", "Tumor_width", "Margin_Type"]
         df_after = df_after[relevant_features]
@@ -67,6 +82,10 @@ if __name__ == '__main__':
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 1")
 
+    # returns to the former format of labels
+    formal_format(pd.DataFrame(test_y_pred))
+
+
     # Part 2
     try:
         est = Estimator2()
@@ -83,3 +102,5 @@ if __name__ == '__main__':
         df_to_save_part_2.to_csv(filepath)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 2")
+
+
