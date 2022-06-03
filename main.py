@@ -26,6 +26,15 @@ def bar_plot(y_true, y_pred):
     fig.tight_layout()
     plt.show()
 
+def scatter_plot(y_true, y_pred):
+    plt.title(f"Scatter plot for the true labels vs the predicted labels")
+    plt.scatter(x=y_true, y=y_pred)
+    plt.xlabel("y true")
+    plt.ylabel("y pred")
+    print("y true", np.unique(y_true))
+    print("y pred", np.unique(y_pred))
+    plt.show()
+
 
 if __name__ == '__main__':
     # Part 1
@@ -71,8 +80,10 @@ if __name__ == '__main__':
         est = Estimator2()
         train1_x, test1_x, train1_y, test1_y = train_test_split(df_after, labels_1)
         est.fit(X=train1_x, y=train1_y)
+        y_pred=est.predict(test1_x)
         loss = est.loss(test1_x, test1_y)
         print("loss part 2:" + str(loss))
+        scatter_plot(test1_y, y_pred)
         part_1_path = 'part2/predictions.csv'
         filepath = Path(part_1_path)
         filepath.parent.mkdir(parents=True, exist_ok=True)
