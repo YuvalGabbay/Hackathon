@@ -57,7 +57,7 @@ if __name__ == '__main__':
         model_1 = Estimator(weights=weights_train)
         model_1.fit(train0_x, train0_y)
         y_pred = model_1.predict(test0_x)
-        # bar_plot(test0_y, y_pred)
+        bar_plot(test0_y, y_pred)
 
         # Get labels for test
         file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
