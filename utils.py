@@ -17,6 +17,8 @@ def load_labels(filename: str) -> pd.DataFrame:
     return df
 
 
+
+
 def load_data(filename: str) -> pd.DataFrame:
     """
     Load city daily temperature dataset and preprocess data.
@@ -114,8 +116,10 @@ def devide_label(df: pd.DataFrame, location):
 
 
 def preprocess_labels_part_1(df: pd.DataFrame):
+    original_labels = pd.DataFrame(df["labels0"])
     devided_labels = []
     loc = ["HEP", "LYM", "BON", "PUL"]
+
     for i in loc:
         a = devide_label(df, i)
         devided_labels.append(a)

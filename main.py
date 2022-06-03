@@ -10,6 +10,26 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 
+def formal_format(df: pd.DataFrame):
+    loc = ["'HEP - Hepatic'", "'LYM - Lymph nodes'", "'BON - Bones'", "'PLE - Pleura'"]
+
+    def label_race(row, arr):
+        val = ""
+        for i in range(4):
+            if row[i] == 1:
+                if len(val) == 0:
+                    val += loc[i]
+                else:
+                    val += ", " + loc[i]
+        val = "[" + val + "]"
+        arr.append(val)
+
+    labels = []
+    df.apply(lambda row: label_race(row, labels), axis=1)
+    col_name = 'אבחנה-Location of distal metastases'
+    return pd.DataFrame(labels, columns=[col_name])
+
+
 def bar_plot(y_true, y_pred):
     X = y_true.columns.values
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -25,6 +45,7 @@ def bar_plot(y_true, y_pred):
     ax.bar_label(rects2, padding=3)
     fig.tight_layout()
     plt.show()
+
 
 def scatter_plot(y_true, y_pred):
     plt.title(f"Scatter plot for the true labels vs the predicted labels")
@@ -68,7 +89,8 @@ if __name__ == '__main__':
         part_1_path = 'part1/predictions.csv'
         filepath = Path(part_1_path)
         filepath.parent.mkdir(parents=True, exist_ok=True)
-        df_to_save = pd.DataFrame(test_y_pred)
+        # returns to the former format of labels
+        df_to_save = formal_format(pd.DataFrame(test_y_pred))
         df_to_save.to_csv(filepath, index=False)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 1")
@@ -78,7 +100,7 @@ if __name__ == '__main__':
         est = Estimator2()
         train1_x, test1_x, train1_y, test1_y = train_test_split(df_after, labels_1)
         est.fit(X=train1_x, y=train1_y)
-        y_pred=est.predict(test1_x)
+        y_pred = est.predict(test1_x)
         loss = est.loss(test1_x, test1_y)
         print("loss part 2:" + str(loss))
         scatter_plot(test1_y, y_pred)
