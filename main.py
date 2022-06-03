@@ -11,13 +11,17 @@ from sklearn.model_selection import train_test_split
 
 
 def formal_format(df: pd.DataFrame):
-    loc = ["'HEP - Hepatic'", "'LYM - Lymph nodes'", "'BON - Bones'", ", 'PLE - Pleura'"]
+    loc = ["'HEP - Hepatic'", "'LYM - Lymph nodes'", "'BON - Bones'", "'PLE - Pleura'"]
 
     def label_race(row, arr):
-        val = []
+        val = ""
         for i in range(4):
             if row[i] == 1:
-                val.append(loc[i])
+                if len(val) == 0:
+                    val += loc[i]
+                else:
+                    val += ", " + loc[i]
+        val = "[" + val + "]"
         arr.append(val)
 
     labels = []
@@ -84,36 +88,36 @@ if __name__ == '__main__':
         part_1_path = 'part1/predictions.csv'
         filepath = Path(part_1_path)
         filepath.parent.mkdir(parents=True, exist_ok=True)
-        df_to_save = pd.DataFrame(test_y_pred)
+        # returns to the former format of labels
+        df_to_save = formal_format(pd.DataFrame(test_y_pred))
         df_to_save.to_csv(filepath, index=False)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 1")
 
-    # returns to the former format of labels
-    formal_format(pd.DataFrame(test_y_pred))
 
 
-    # Part 2
-    try:
-        est = Estimator2()
-        train1_x, test1_x, train1_y, test1_y = train_test_split(df_after, labels_1)
-        est.fit(X=train1_x, y=train1_y)
-        y_pred=est.predict(test1_x)
-        loss = est.loss(test1_x, test1_y)
-        print("loss part 2:" + str(loss))
-        scatter_plot(test1_y, y_pred)
-        part_1_path = 'part2/predictions.csv'
-        filepath = Path(part_1_path)
-        filepath.parent.mkdir(parents=True, exist_ok=True)
-        col_name = 'אבחנה-Tumor size'
-        file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
-        test_data = utils.load_data(filename=file_name)
-        test_df = utils.preprocess(test_data)
-        test_df = test_df[relevant_features]
-        test_y_pred = est.predict(test_df)
-        df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
-        df_to_save_part_2.to_csv(filepath, index=False)
-    except ValueError:
-        raise ValueError("Oh No - something went wrong in part 2")
+
+    # # Part 2
+    # try:
+    #     est = Estimator2()
+    #     train1_x, test1_x, train1_y, test1_y = train_test_split(df_after, labels_1)
+    #     est.fit(X=train1_x, y=train1_y)
+    #     y_pred=est.predict(test1_x)
+    #     loss = est.loss(test1_x, test1_y)
+    #     print("loss part 2:" + str(loss))
+    #     scatter_plot(test1_y, y_pred)
+    #     part_1_path = 'part2/predictions.csv'
+    #     filepath = Path(part_1_path)
+    #     filepath.parent.mkdir(parents=True, exist_ok=True)
+    #     col_name = 'אבחנה-Tumor size'
+    #     file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
+    #     test_data = utils.load_data(filename=file_name)
+    #     test_df = utils.preprocess(test_data)
+    #     test_df = test_df[relevant_features]
+    #     test_y_pred = est.predict(test_df)
+    #     df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
+    #     df_to_save_part_2.to_csv(filepath, index=False)
+    # except ValueError:
+    #     raise ValueError("Oh No - something went wrong in part 2")
 
 

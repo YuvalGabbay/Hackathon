@@ -126,7 +126,7 @@ def preprocess_labels_part_1(df: pd.DataFrame):
     print("Divide", devided_labels)
     print("SUM", np.sum(devided_labels[0]))
     y_df = pd.DataFrame(np.swapaxes(np.array(devided_labels), 0, 1), columns=loc)
-    return y_df, original_labels
+    return y_df
 
 
 def confusion_matrix(a: np.ndarray, b: np.ndarray) -> np.ndarray:
