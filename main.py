@@ -42,6 +42,13 @@ def bar_plot(y_true, y_pred):
     fig.tight_layout()
     plt.show()
 
+def scatter_plot(y_true, y_pred):
+    plt.title(f"Scatter plot for the true labels vs the predicted labels")
+    plt.scatter(x=y_true, y=y_pred, c='green')
+    plt.xlabel("y true")
+    plt.ylabel("y pred")
+    plt.show()
+
 
 if __name__ == '__main__':
     # Part 1
@@ -57,16 +64,16 @@ if __name__ == '__main__':
         data['labels0'] = labels0['labels']
         data['labels1'] = labels1['labels']
         df_after = utils.preprocess(data)
-        new_labels, original_labels = utils.preprocess_labels_part_1(df_after)
+        new_labels = utils.preprocess_labels_part_1(df_after)
         labels_1 = df_after['labels1']
         relevant_features = ["Age", "KI67_protein", "Surgery_sum", "Tumor_depth", "Tumor_width", "Margin_Type"]
         df_after = df_after[relevant_features]
-        train0_x, test0_x, train0_y, test0_y=train_test_split(df_after, new_labels)
+        train0_x, test0_x, train0_y, test0_y = train_test_split(df_after, new_labels)
         weights_train = np.where((train0_y >= 1).any(axis=1), 0.9, 0.05)
         model_1 = Estimator(weights=weights_train)
         model_1.fit(train0_x, train0_y)
         y_pred = model_1.predict(test0_x)
-        bar_plot(test0_y, y_pred)
+        # bar_plot(test0_y, y_pred)
 
         # Get labels for test
         file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
@@ -78,7 +85,7 @@ if __name__ == '__main__':
         filepath = Path(part_1_path)
         filepath.parent.mkdir(parents=True, exist_ok=True)
         df_to_save = pd.DataFrame(test_y_pred)
-        df_to_save.to_csv(filepath)
+        df_to_save.to_csv(filepath, index=False)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 1")
 
@@ -89,17 +96,23 @@ if __name__ == '__main__':
     # Part 2
     try:
         est = Estimator2()
-        train1_x, test1_x, train1_y, test1_y=train_test_split(df_after, labels_1)
+        train1_x, test1_x, train1_y, test1_y = train_test_split(df_after, labels_1)
         est.fit(X=train1_x, y=train1_y)
+        y_pred=est.predict(test1_x)
         loss = est.loss(test1_x, test1_y)
         print("loss part 2:" + str(loss))
-
+        scatter_plot(test1_y, y_pred)
         part_1_path = 'part2/predictions.csv'
         filepath = Path(part_1_path)
         filepath.parent.mkdir(parents=True, exist_ok=True)
         col_name = 'אבחנה-Tumor size'
+        file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
+        test_data = utils.load_data(filename=file_name)
+        test_df = utils.preprocess(test_data)
+        test_df = test_df[relevant_features]
+        test_y_pred = est.predict(test_df)
         df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
-        df_to_save_part_2.to_csv(filepath)
+        df_to_save_part_2.to_csv(filepath, index=False)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 2")
 
