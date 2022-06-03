@@ -62,7 +62,7 @@ if __name__ == '__main__':
         filepath = Path(part_1_path)
         filepath.parent.mkdir(parents=True, exist_ok=True)
         df_to_save = pd.DataFrame(test_y_pred)
-        df_to_save.to_csv(filepath)
+        df_to_save.to_csv(filepath, index=False)
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 1")
 
@@ -74,11 +74,17 @@ if __name__ == '__main__':
     loss = est.loss(test1_x, test1_y)
     print("loss part 2:" + str(loss))
 
+
     part_1_path = 'part2/predictions.csv'
     filepath = Path(part_1_path)
     filepath.parent.mkdir(parents=True, exist_ok=True)
     col_name = 'אבחנה-Tumor size'
+    file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
+    test_data = utils.load_data(filename=file_name)
+    test_df = utils.preprocess(test_data)
+    test_df = test_df[relevant_features]
+    test_y_pred = est.predict(test_df)
     df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
-    df_to_save_part_2.to_csv(filepath)
+    df_to_save_part_2.to_csv(filepath, index=False)
     # except ValueError:
     #     raise ValueError("Oh No - something went wrong in part 2")
