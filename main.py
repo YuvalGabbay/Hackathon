@@ -7,6 +7,8 @@ from Model import Estimator
 from Model2 import Estimator2
 import utils
 from pathlib import Path
+from sklearn.model_selection import train_test_split
+
 
 
 def bar_plot(y_true, y_pred):
@@ -44,11 +46,12 @@ if __name__ == '__main__':
         labels_1 = df_after['labels1']
         relevant_features = ["Age", "KI67_protein", "Surgery_sum", "Tumor_depth", "Tumor_width", "Margin_Type"]
         df_after = df_after[relevant_features]
-        weights = np.where((new_labels >= 1).any(axis=1), 0.9, 0.05)
-        model_1 = Estimator(weights=weights)
-        model_1.fit(df_after, new_labels)
-        y_pred = model_1.predict(df_after)
-        # bar_plot(new_labels, y_pred)
+        train0_x, test0_x, train0_y, test0_y=train_test_split(df_after, new_labels)
+        weights_train = np.where((train0_y >= 1).any(axis=1), 0.9, 0.05)
+        model_1 = Estimator(weights=weights_train)
+        model_1.fit(train0_x, train0_y)
+        y_pred = model_1.predict(test0_x)
+        bar_plot(test0_y, y_pred)
 
         # Get labels for test
         file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
@@ -67,8 +70,9 @@ if __name__ == '__main__':
     # Part 2
     try:
         est = Estimator2()
-        est.fit(X=df_after, y=data['labels1'])
-        loss = est.loss(df_after, df_after['labels1'])
+        train1_x, test1_x, train1_y, test1_y=train_test_split(df_after, labels_1)
+        est.fit(X=train1_x, y=train1_y)
+        loss = est.loss(test1_x, test1_y)
         print("loss part 2:" + str(loss))
 
         part_1_path = 'part2/predictions.csv'
