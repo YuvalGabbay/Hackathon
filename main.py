@@ -25,7 +25,9 @@ def bar_plot(y_true, y_pred):
     fig.tight_layout()
     plt.show()
 
+
 if __name__ == '__main__':
+    # Part 1
     try:
         # train the model
         file_name = 'Mission 2 - Breast Cancer/train.feats.csv'
@@ -62,9 +64,11 @@ if __name__ == '__main__':
     except ValueError:
         raise ValueError("Oh No - something went wrong in part 1")
 
-
-
-
-    # est = Estimator2
-    # est.fit(X=df_after, y=data['labels1'])
-    # print(est.loss(df_after, data['labels1']))
+    # Part 2
+    try:
+        est = Estimator2()
+        est.fit(X=df_after, y=data['labels1'])
+        loss = est.loss(df_after, data['labels1'])
+        print("loss part 2:" + str(loss))
+    except ValueError:
+        raise ValueError("Oh No - something went wrong in part 2")
