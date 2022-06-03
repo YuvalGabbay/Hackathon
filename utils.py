@@ -29,7 +29,7 @@ def load_data(filename: str) -> pd.DataFrame:
     -------
     Design matrix and response vector (Temp)
     """
-    df = pd.read_csv(filepath_or_buffer=filename)
+    df = pd.read_csv(filepath_or_buffer=filename, skiprows = 1)
     df.columns = ['Form_Name',
                   'Hospital',
                   'User_Name',
@@ -71,15 +71,12 @@ def load_data(filename: str) -> pd.DataFrame:
     return df
 
 
-def preprocess1(df: pd.DataFrame):
+def preprocess(df: pd.DataFrame):
     histological_diagnosis = ["INFILTRATING DUCT CARCINOMA", "LOBULAR INFILTRATING CARCINOMA",
                               "INTRADUCTAL CARCINOMA", ]
     # print(df["Histological_diagnosis"].unique())
     df.drop_duplicates()
-    return df
 
-
-def preprocess2(df: pd.DataFrame):
     # preprocess the KI67_protein field
     field_name = 'KI67_protein'
     unique = df[field_name].value_counts()
@@ -91,10 +88,7 @@ def preprocess2(df: pd.DataFrame):
     df[field_name] = df[field_name].astype(float)
     mean_value = df[field_name].mean()
     df[field_name].fillna(value=mean_value, inplace=True)
-    return df
 
-
-def preprocess3(df: pd.DataFrame):
     # drop nan from Surgery_sum,Tumor_depth,Tumor_width
     df["Surgery_sum"] = df["Surgery_sum"].fillna(0)
     df["Tumor_depth"] = df["Tumor_depth"].fillna(0)
@@ -107,7 +101,7 @@ def preprocess3(df: pd.DataFrame):
     # print(df["Margin_Type"].unique())
 
     # Drop duplicate columns in which the user name
-    df = df.drop_duplicates(subset=['id'], keep='first')
+    # df = df.drop_duplicates(subset=['id'], keep='first')
     return df
 
 
@@ -117,7 +111,7 @@ def devide_label(df: pd.DataFrame, location):
     return a
 
 
-def preprocess4(df: pd.DataFrame):
+def preprocess_labels_part_1(df: pd.DataFrame):
     devided_labels = []
     loc = ["HEP", "LYM", "BON", "PUL"]
     for i in loc:
