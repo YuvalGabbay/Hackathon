@@ -8,7 +8,9 @@
 from typing import Tuple
 import numpy as np
 import pandas as pd
+import warnings
 import random
+
 
 def load_labels(filename: str) -> pd.DataFrame:
     df = pd.read_csv(filepath_or_buffer=filename, names=["labels"], skiprows=1)
@@ -82,7 +84,9 @@ def preprocess(df: pd.DataFrame):
     df[field_name] = df[field_name].str.replace(pat='(/w+)', repl='-1', regex=True)
     df[field_name] = df[field_name].fillna(value=-1)
     df[field_name] = df[field_name].str.findall('(\d+)')
-    df[field_name] = df[field_name].apply(lambda x: np.float(np.array(x, dtype=float).mean()))
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        df[field_name] = df[field_name].apply(lambda x: np.float(np.array(x, dtype=float).mean()))
     df[field_name] = df[field_name].astype(float)
     mean_value = df[field_name].mean()
     df[field_name].fillna(value=mean_value, inplace=True)
@@ -119,6 +123,7 @@ def preprocess_labels_part_1(df: pd.DataFrame):
     print("SUM", np.sum(devided_labels[0]))
     y_df = pd.DataFrame(np.swapaxes(np.array(devided_labels), 0, 1), columns=loc)
     return y_df
+
 
 def confusion_matrix(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     """
