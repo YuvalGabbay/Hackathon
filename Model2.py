@@ -1,9 +1,8 @@
 from sklearn.ensemble import AdaBoostClassifier
 import numpy as np
 from typing import NoReturn
-from sklearn.datasets import load_iris
 from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression
 
 class Estimator2:
     """
@@ -20,7 +19,7 @@ class Estimator2:
             Degree of polynomial to fit
         """
         super().__init__()
-        self.model = DecisionTreeClassifier(random_state=0)
+        self.model = LinearRegression()
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> NoReturn:
         """
