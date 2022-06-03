@@ -28,11 +28,9 @@ def bar_plot(y_true, y_pred):
 
 def scatter_plot(y_true, y_pred):
     plt.title(f"Scatter plot for the true labels vs the predicted labels")
-    plt.scatter(x=y_true, y=y_pred)
+    plt.scatter(x=y_true, y=y_pred, c='green')
     plt.xlabel("y true")
     plt.ylabel("y pred")
-    print("y true", np.unique(y_true))
-    print("y pred", np.unique(y_pred))
     plt.show()
 
 
