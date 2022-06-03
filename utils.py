@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 
 
 def load_labels(filename: str) -> pd.DataFrame:
-    df = pd.read_csv(filepath_or_buffer=filename, names=["labels"])
+    df = pd.read_csv(filepath_or_buffer=filename, names=["labels"], skiprows=1)
     return df
 
 
@@ -29,7 +29,7 @@ def load_data(filename: str) -> pd.DataFrame:
     -------
     Design matrix and response vector (Temp)
     """
-    df = pd.read_csv(filepath_or_buffer=filename, skiprows = 1)
+    df = pd.read_csv(filepath_or_buffer=filename, skiprows=1)
     df.columns = ['Form_Name',
                   'Hospital',
                   'User_Name',

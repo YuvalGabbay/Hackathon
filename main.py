@@ -10,7 +10,6 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 
-
 def bar_plot(y_true, y_pred):
     X = y_true.columns.values
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -46,12 +45,12 @@ if __name__ == '__main__':
         labels_1 = df_after['labels1']
         relevant_features = ["Age", "KI67_protein", "Surgery_sum", "Tumor_depth", "Tumor_width", "Margin_Type"]
         df_after = df_after[relevant_features]
-        train0_x, test0_x, train0_y, test0_y=train_test_split(df_after, new_labels)
+        train0_x, test0_x, train0_y, test0_y = train_test_split(df_after, new_labels)
         weights_train = np.where((train0_y >= 1).any(axis=1), 0.9, 0.05)
         model_1 = Estimator(weights=weights_train)
         model_1.fit(train0_x, train0_y)
         y_pred = model_1.predict(test0_x)
-        bar_plot(test0_y, y_pred)
+        # bar_plot(test0_y, y_pred)
 
         # Get labels for test
         file_name = 'Mission 2 - Breast Cancer/test.feats.csv'
@@ -68,18 +67,18 @@ if __name__ == '__main__':
         raise ValueError("Oh No - something went wrong in part 1")
 
     # Part 2
-    try:
-        est = Estimator2()
-        train1_x, test1_x, train1_y, test1_y=train_test_split(df_after, labels_1)
-        est.fit(X=train1_x, y=train1_y)
-        loss = est.loss(test1_x, test1_y)
-        print("loss part 2:" + str(loss))
+    # try:
+    est = Estimator2()
+    train1_x, test1_x, train1_y, test1_y = train_test_split(df_after, labels_1)
+    est.fit(X=train1_x, y=train1_y)
+    loss = est.loss(test1_x, test1_y)
+    print("loss part 2:" + str(loss))
 
-        part_1_path = 'part2/predictions.csv'
-        filepath = Path(part_1_path)
-        filepath.parent.mkdir(parents=True, exist_ok=True)
-        col_name = 'אבחנה-Tumor size'
-        df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
-        df_to_save_part_2.to_csv(filepath)
-    except ValueError:
-        raise ValueError("Oh No - something went wrong in part 2")
+    part_1_path = 'part2/predictions.csv'
+    filepath = Path(part_1_path)
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    col_name = 'אבחנה-Tumor size'
+    df_to_save_part_2 = pd.DataFrame(test_y_pred, columns=[col_name])
+    df_to_save_part_2.to_csv(filepath)
+    # except ValueError:
+    #     raise ValueError("Oh No - something went wrong in part 2")
